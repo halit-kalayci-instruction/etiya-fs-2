@@ -9,6 +9,8 @@ import com.etiya.fullstack.entities.responses.category.GetCategoryResponse;
 import com.etiya.fullstack.repositories.CategoryRepository;
 import com.etiya.fullstack.services.abstracts.CategoryService;
 import org.modelmapper.ModelMapper;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,10 +19,13 @@ import java.util.List;
 public class CategoryServiceImpl implements CategoryService {
     private CategoryRepository categoryRepository;
     private ModelMapper modelMapper;
+    private MessageSource messageSource;
 
-    public CategoryServiceImpl(CategoryRepository categoryRepository, ModelMapper modelMapper) {
+
+    public CategoryServiceImpl(CategoryRepository categoryRepository, ModelMapper modelMapper, MessageSource messageSource) {
         this.categoryRepository = categoryRepository;
         this.modelMapper = modelMapper;
+        this.messageSource = messageSource;
     }
 
     @Override
@@ -47,9 +52,12 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void update(UpdateCategoryRequest request) {
+        String message = messageSource.getMessage("categoryNotExist", null, LocaleContextHolder.getLocale());
+
+
         Category categoryToUpdate = categoryRepository
                 .findById(request.getId())
-                .orElseThrow(() -> new BusinessException("Böyle bir kategori bulunamadı."));
+                .orElseThrow(() -> new BusinessException(message));
 
         categoryToUpdate.setName(request.getName());
 

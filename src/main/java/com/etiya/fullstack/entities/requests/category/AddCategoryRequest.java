@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AddCategoryRequest {
     @NotBlank()
-    @Size(min=3, message = "Name should be longer than 3 characters.")
+    @Size(min=3,max=10, message = "{fieldShouldBeMinimum}")
     private String name;
 }

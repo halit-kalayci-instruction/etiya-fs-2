@@ -30,7 +30,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({BusinessException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ExceptionResponse<String> handleBusinessException(BusinessException exception){
+    public ExceptionResponse<String> handleBusinessException(BusinessException exception)
+    {
         return new ExceptionResponse<>("BusinessException",exception.getMessage());
     }
 }
