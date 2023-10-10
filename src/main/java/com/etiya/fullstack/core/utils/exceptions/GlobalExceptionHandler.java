@@ -1,5 +1,6 @@
 package com.etiya.fullstack.core.utils.exceptions;
 
+import com.etiya.fullstack.core.utils.exceptions.types.BusinessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -15,7 +16,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({MethodArgumentNotValidException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Object handleValidationException(MethodArgumentNotValidException exception)
+    public ExceptionResponse<Object> handleValidationException(MethodArgumentNotValidException exception)
     {
         // id, id alanı boş bırakılamaz
         Map<String,String> errors = new HashMap<>();
@@ -24,6 +25,12 @@ public class GlobalExceptionHandler {
             errors.put(fieldError.getField(), fieldError.getDefaultMessage());
         }
 
-        return errors;
+        return new ExceptionResponse<>("ValidationException",errors);
+    }
+
+    @ExceptionHandler({BusinessException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ExceptionResponse<String> handleBusinessException(BusinessException exception){
+        return new ExceptionResponse<>("BusinessException",exception.getMessage());
     }
 }

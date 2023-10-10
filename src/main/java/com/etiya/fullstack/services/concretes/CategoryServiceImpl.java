@@ -1,5 +1,6 @@
 package com.etiya.fullstack.services.concretes;
 
+import com.etiya.fullstack.core.utils.exceptions.types.BusinessException;
 import com.etiya.fullstack.entities.Category;
 import com.etiya.fullstack.entities.requests.category.AddCategoryRequest;
 import com.etiya.fullstack.entities.requests.category.UpdateCategoryRequest;
@@ -34,6 +35,11 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void add(AddCategoryRequest request) {
+        Category categoryWithSameName = categoryRepository.findByName(request.getName());
+        if(categoryWithSameName!=null){
+            throw new BusinessException("Aynı isimde ikinci kategori eklenemez.");
+        }
+
         Category category = modelMapper.map(request, Category.class);
 
         categoryRepository.save(category);
@@ -41,7 +47,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void update(UpdateCategoryRequest request) {
-        Category categoryToUpdate = categoryRepository.findById(request.getId()).orElseThrow();
+        Category categoryToUpdate = categoryRepository
+                .findById(request.getId())
+                .orElseThrow(() -> new BusinessException("Böyle bir kategori bulunamadı."));
 
         categoryToUpdate.setName(request.getName());
 
@@ -50,7 +58,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void delete(int id) {
-        Category categoryToDelete = categoryRepository.findById(id).orElseThrow();
+        Category categoryToDelete = categoryRepository
+                .findById(id)
+                .orElseThrow(() -> new BusinessException("Böyle bir kategori bulunamadı."));
 
         categoryRepository.delete(categoryToDelete);
     }
