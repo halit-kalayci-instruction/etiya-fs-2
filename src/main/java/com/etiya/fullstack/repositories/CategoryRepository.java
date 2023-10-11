@@ -16,7 +16,7 @@ public interface CategoryRepository extends JpaRepository<Category,Integer> {
     List<GetAllCategoryResponse> getAllForListing();
 
     @Query("Select new com.etiya.fullstack.entities.responses.category.GetCategoryResponse(c.id,c.name)" +
-            " From Category c Where id=:categoryId")
+            " From Category c Where id= :categoryId")
     GetCategoryResponse getById(@Param("categoryId") int id);
 
 }
