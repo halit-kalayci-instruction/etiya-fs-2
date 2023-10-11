@@ -15,7 +15,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/categories")
-@CrossOrigin
 @SecurityRequirement(name="securityScheme")
 public class CategoriesController {
     private final CategoryService categoryService;
